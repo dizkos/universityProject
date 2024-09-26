@@ -1,0 +1,50 @@
+@import '@styles/vars.scss';
+
+.component {
+  width: 100%;
+  & > .button {
+    border: 0;
+    background: $gray-color;
+    display: block;
+    width: 100%;
+    padding: 15px 24px;
+    min-height: 51px;
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 24px;
+    font-size: 18px;
+    color: $dark-color;
+
+    & div {
+      &:nth-child(1) {
+        width: 20px;
+        height: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      &:nth-child(2) {
+        flex-grow: 1;
+        text-align: start;
+      }
+    }
+  }
+  &.active > .button {
+    background-color: $red-color;
+    color: $white-color;
+  }
+}
+
+.content {
+  margin-top: 17px;
+  font-size: 16px;
+  font-weight: 300;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  &.show {
+    max-height: 1000px;
+  }
+}

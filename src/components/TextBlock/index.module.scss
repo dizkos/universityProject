@@ -1,0 +1,53 @@
+@import '@styles/vars.scss';
+
+.component {
+  padding: 60px;
+  color: $white-color;
+  h3 {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 43px;
+  }
+
+  > div {
+    font-size: 20px;
+    line-height: 26px;
+    font-weight: 300;
+    min-height: 114px;
+    margin-top: 24px;
+
+    ul {
+      font-size: inherit;
+      line-height: inherit;
+    }
+  }
+  &.dark {
+    background-color: $dark-color;
+  }
+  &.red {
+    background-color: $red-color;
+    position: relative;
+    clip-path: polygon(0 0, calc(100% - 43px) 0, 100% 43px, 100% 100%, 0 100%);
+
+    &:after {
+      content: '';
+      position: absolute;
+      top: 0%;
+      right: 0%;
+      width: 0px;
+      height: 0px;
+      border-top: 43px solid transparent;
+      border-left: 43px solid $darkRed-color;
+    }
+  }
+}
+
+@media (max-width: $phone-size) {
+  .component {
+    padding: 30px 15px;
+    h3 {
+      font-size: 25px;
+      line-height: 120%;
+    }
+  }
+}

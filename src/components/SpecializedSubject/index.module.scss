@@ -1,0 +1,34 @@
+@import '@styles/vars.scss';
+
+.component {
+  margin-top: 89px;
+  & > .title {
+    font-size: 24px;
+  }
+  .moduls {
+    margin-top: 80px;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: $tablet-size) {
+  .component {
+    .moduls {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+}
+
+@media (max-width: $phone-size) {
+  .component {
+    margin-top: 34px;
+    & > .title {
+      font-size: 22px;
+    }
+    .moduls {
+      margin-top: 27px;
+    }
+  }
+}

@@ -1,0 +1,57 @@
+@import '../styles/vars.scss';
+
+.page {
+  max-width: 1280px;
+
+  h1 {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 43px;
+    text-align: center;
+    margin-top: 70px;
+  }
+  h2 {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 31px;
+  }
+}
+
+.blocks {
+  display: flex;
+  gap: 30px;
+  margin-top: 130px;
+  margin-bottom: 130px;
+  > div {
+    width: 50%;
+  }
+}
+
+@media (max-width: $tablet-size) {
+  .page {
+    width: 100%;
+  }
+  .blocks {
+    flex-direction: column;
+    > div {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: $phone-size) {
+  .main {
+    h1 {
+      font-size: 28px;
+      font-weight: 500;
+      line-height: 33px;
+      text-align: start;
+      margin-top: 30px;
+    }
+  }
+  .blocks {
+    margin-top: 44px;
+    margin-bottom: 44px;
+    gap: 20px;
+  }
+}

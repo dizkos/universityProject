@@ -1,95 +1,77 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import SpecializedSubjects from '@components/SpecializedSubject';
+import TextBlock from '@components/TextBlock';
+import {
+  DivededSubjectI,
+  RepoItemI,
+  SkillI,
+  SpecializedSubjectsI,
+  specializedSubjectsFromServerI,
+} from '../interfaces';
+import styles from './page.module.scss';
 
-export default function Home() {
+export default async function Home() {
+  const res = await fetch('https://api.moscow.mba/products', {
+    // Есть вариант сделать SSR, но у нас файл весит 15 мб, что в целом достаточно нагружает сервер. Думаю лучше сделать статическую генерацию
+    // cache: 'no-store',
+    cache: 'force-cache',
+  });
+  const repo = await res.json();
+
+  const dataForDisplay = repo.reduce(
+    (acc: SpecializedSubjectsI[], elem: RepoItemI) => {
+      const specializedSubjects = elem
+        .specializedSubjects[0] as specializedSubjectsFromServerI;
+
+      if (specializedSubjects && specializedSubjects.skills) {
+        if (specializedSubjects.skills.length) {
+          const higherAverageNumber = Math.ceil(
+            specializedSubjects.skills.length / 2
+          );
+
+          const dividedSubjects = specializedSubjects.skills.reduce(
+            (acc: DivededSubjectI[], elem: SkillI, index: number) => {
+              acc[index <= higherAverageNumber - 1 ? 0 : 1].skills.push(elem);
+              return acc;
+            },
+            [
+              { title: 'firstModule', skills: [] },
+              { title: 'secondModule', skills: [] },
+            ]
+          );
+          acc.push({
+            title: elem.title,
+            dividedSubjects,
+          });
+        }
+      }
+      return acc;
+    },
+    []
+  );
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
+        <h1>Специализированные дисциплины</h1>
+        {dataForDisplay.map((elem: SpecializedSubjectsI, index: number) => (
+          <SpecializedSubjects key={index} {...elem} />
+        ))}
       </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      <section className={styles.blocks}>
+        <TextBlock title="Практические модули" color="red">
+          Работа над собственными проектами: практика групповых взаимодействий,
+          кейс-методы, эссе
+        </TextBlock>
+        <TextBlock title="Итоговая аттестация">
+          <ul>
+            <li>
+              Бизнес-проектирование (подготовка итоговой аттестационной работы,
+              консультирование по бизнес-проектированию)
+            </li>
+            <li>Защита итоговой аттестационной работы</li>
+          </ul>
+        </TextBlock>
+      </section>
     </div>
   );
 }
